@@ -109,6 +109,16 @@ async def on_startup():
     # 1. Initialize SQLite Database Schema
     await database.init_db()
     
+    # 1b. Dynamically fetch target channel title to keep name auto-synchronized
+    if config.CHANNEL_ID:
+        try:
+            chat = await bot.get_chat(config.CHANNEL_ID)
+            if chat.title:
+                config.CHANNEL_NAME = chat.title
+                logger.info(f"Dynamically updated channel name to: {config.CHANNEL_NAME}")
+        except Exception as e:
+            logger.warning(f"Could not retrieve channel title dynamically: {e}")
+    
     # 2. Start the AsyncIOScheduler
     scheduler.scheduler.start()
     logger.info("APScheduler started.")

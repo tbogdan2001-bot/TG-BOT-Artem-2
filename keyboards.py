@@ -53,8 +53,7 @@ def get_dark_cta_keyboard(club_link: str = None) -> InlineKeyboardMarkup:
 # Funnel keyboards kept for full backward compatibility
 def get_subscribe_keyboard(channel_link: str = None) -> InlineKeyboardMarkup:
     """Returns the keyboard for Step 2 (Channel subscription invitation)."""
-    # Force the specific requested subscription link
-    link = "https://t.me/+0npyyzG-yAoxYmMx"
+    link = channel_link if channel_link else config.CHANNEL_LINK
     builder = InlineKeyboardBuilder()
     builder.button(text="📢 Подписаться", url=link)
     builder.button(text="✅ Я подписался", callback_data="check_subscription")
@@ -63,8 +62,7 @@ def get_subscribe_keyboard(channel_link: str = None) -> InlineKeyboardMarkup:
 
 def get_nudge_keyboard(channel_link: str = None) -> InlineKeyboardMarkup:
     """Returns the keyboard for Step 2b (Subscription nudge/reminder)."""
-    # Force the specific requested subscription link
-    link = "https://t.me/+0npyyzG-yAoxYmMx"
+    link = channel_link if channel_link else config.CHANNEL_LINK
     builder = InlineKeyboardBuilder()
     builder.button(text="📢 Получить бонус", url=link)
     builder.button(text="✅ Я подписался", callback_data="check_subscription")
@@ -73,8 +71,7 @@ def get_nudge_keyboard(channel_link: str = None) -> InlineKeyboardMarkup:
 
 def get_retry_subscription_keyboard(channel_link: str = None) -> InlineKeyboardMarkup:
     """Returns the keyboard shown when subscription verification fails."""
-    # Force the specific requested subscription link
-    link = "https://t.me/+0npyyzG-yAoxYmMx"
+    link = channel_link if channel_link else config.CHANNEL_LINK
     builder = InlineKeyboardBuilder()
     builder.button(text="📢 Подписаться", url=link)
     builder.button(text="🔄 Попробовать снова", callback_data="check_subscription")

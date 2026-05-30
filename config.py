@@ -406,7 +406,7 @@ if not CHANNELS:
             "link": single_link or "https://t.me/+0npyyzG-yAoxYmMx",
             "name": single_name or "Артём Низаев | Криптовалюта, Аналитика, Доход",
             "persona_id": "artem",
-            "channel_id": single_id or "-1002222222222"
+            "channel_id": single_id or "-1003964301634"
         })
 
 # Default channels if completely empty
@@ -417,7 +417,7 @@ if not CHANNELS:
             "link": "https://t.me/+0npyyzG-yAoxYmMx",
             "name": "Артём Низаев | Криптовалюта, Аналитика, Доход",
             "persona_id": "artem",
-            "channel_id": "-1002222222222"
+            "channel_id": "-1003964301634"
         }
     ]
 
@@ -598,7 +598,7 @@ RETENTION_PLAN = [
             "Осталось последнее свободное место со скидкой 50%. Если вы хотите начать зарабатывать под моим руководством — нажимайте кнопку ниже прямо сейчас! 👇"
         ),
         "keyboard": [
-            [{"text": "📥 Занять место", "url": f"https://t.me/{CLOSER_USERNAME}"}]
+            [{"text": "📥 Занять место", "url": CHANNEL_LINK}]
         ]
     }
 ]
@@ -655,7 +655,7 @@ if not MANAGER_ACCOUNTS:
 
 # MANAGER_GROUPS configuration list for Feature 3 manager rotation
 MANAGER_GROUPS = [
-    {"group_id": "-1002222222222", "name": "Crypto Discussion 💬"},
+    {"group_id": "-1003964301634", "name": "Crypto Discussion 💬"},
     {"group_id": "-1003333333333", "name": "Estate Talk 🏢"},
     {"group_id": "-1004444444444", "name": "Arbitrage Club 📈"}
 ]
@@ -711,7 +711,7 @@ PRESSURE_PLAN = [
         ),
         "image": "https://images.unsplash.com/photo-1553729459-beb747028b4e?w=1080",
         "keyboard": [
-            [{"text": "📥 Вступить по спец. условиям", "url": f"https://t.me/{CLOSER_USERNAME}"}]
+            [{"text": "📥 Вступить по спец. условиям", "url": CHANNEL_LINK}]
         ]
     },
     {
