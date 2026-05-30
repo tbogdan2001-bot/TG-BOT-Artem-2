@@ -111,29 +111,6 @@ def main():
     print("===================================================")
     safe_input("\nНажмите клавишу ENTER для выхода...")
 
-async def join_configured_channels(bot):
-    """
-    Attempts to join every channel configured in config.CHANNELS using bot.join_chat(invite_link).
-    Logs the result of each join attempt.
-    """
-    import config
-    import logging
-    logger = logging.getLogger(__name__)
-    
-    logger.info("Attempting to join all configured channels on startup...")
-    for ch in config.CHANNELS:
-        name = ch.get("name", "Unknown Channel")
-        link = ch.get("link")
-        if not link:
-            logger.warning(f"No invite link found for channel {name}. Skipping startup join.")
-            continue
-            
-        try:
-            # Join the chat using the invite link
-            await bot.join_chat(link)
-            logger.info(f"✅ Successfully joined channel '{name}' via link: {link}")
-        except Exception as e:
-            logger.error(f"❌ Failed to join channel '{name}' via link {link}: {e}")
 
 if __name__ == "__main__":
     main()

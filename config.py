@@ -209,29 +209,6 @@ def check_and_interactive_config():
     )
     print("✅ Блок 5 сохранён. Продолжаем...\n")
 
-    # БЛОК 6 — CLOSER / CRM
-    print("--- [ БЛОК 6: Closer CRM ] ---")
-    closer_chat = prompt_validated_input(
-        "💬 Введите ID чата Closer CRM для уведомлений (CLOSER_NOTIFY_CHAT_ID): ",
-        lambda v: (v.startswith("-") or v.isdigit()),
-        "Чат ID должен быть числовым (обычно начинается с минус знака)."
-    )
-    closer_username = prompt_validated_input(
-        "👤 Введите username менеджера-клоузера без знака @ (CLOSER_USERNAME): ",
-        lambda v: not v.startswith("@") and len(v) > 0,
-        "Username должен быть без символа '@' и не пустым."
-    )
-    print("✅ Блок 6 сохранён. Продолжаем...\n")
-
-    # БЛОК 7 — ПРИВАТНЫЙ КЛУБ
-    print("--- [ БЛОК 7: Приватный клуб ] ---")
-    club_link = prompt_validated_input(
-        "🔗 Введите invite-ссылку на приватный клуб (PRIVATE_CLUB_LINK): ",
-        lambda v: v.startswith("https://t.me/"),
-        "Ссылка на приватный клуб должна начинаться с 'https://t.me/'"
-    )
-    print("✅ Блок 7 сохранён.\n")
-
     # Write to .env
     try:
         with open(env_path, "w", encoding="utf-8") as f:
@@ -254,7 +231,6 @@ def check_and_interactive_config():
                     f.write(f"CHANNEL_{i}_ID={ch['id']}\n")
                     f.write(f"CHANNEL_{i}_LINK={ch['link']}\n")
                     f.write(f"CHANNEL_{i}_NAME={ch['name']}\n")
-                    f.write(f"CHANNEL_{i}_PERSONA={ch['persona']}\n")
                 f.write("\n")
                 
             # Keitaro
@@ -270,13 +246,6 @@ def check_and_interactive_config():
             # AI
             f.write(f"GEMINI_API_KEY={gemini_key}\n")
             f.write(f"POSTING_SCHEDULE={posting_schedule}\n\n")
-            
-            # CRM
-            f.write(f"CLOSER_NOTIFY_CHAT_ID={closer_chat}\n")
-            f.write(f"CLOSER_USERNAME={closer_username}\n\n")
-            
-            # Private Club
-            f.write(f"PRIVATE_CLUB_LINK={club_link}\n")
             
         print("[УСПЕХ] Файл .env успешно создан!")
     except Exception as e:

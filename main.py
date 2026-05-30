@@ -119,12 +119,7 @@ async def on_startup():
     # 4. Start Telethon userbots and schedule auto-posting / manager followups / lead check loops
     await scheduler.start_scheduler_tasks(bot)
 
-    # 5. Join all configured channels on startup
-    try:
-        import build_bot
-        await build_bot.join_configured_channels(bot)
-    except Exception as join_err:
-        logger.error(f"Error joining configured channels on startup: {join_err}")
+
 
 async def on_shutdown():
     """Triggered when the bot stops polling."""
