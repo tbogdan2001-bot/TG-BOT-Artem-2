@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artem Trade — Готовые сделки от личного трейдера</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root, [data-theme="dark"] {
+    --color-bg: #0d0d0d;
+    --color-surface: #141414;
+    --color-surface-2: #1a1a1a;
+    --color-border: rgba(255,255,255,0.08);
+    --color-text: #f0ede8;
+    --color-text-muted: #9a9690;
+    --color-text-faint: #5a5855;
+    --color-primary: #c9a84c;
+    --color-primary-hover: #e0be6a;
+    --color-primary-glow: rgba(201,168,76,0.15);
+    --font-display: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+    --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+    --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+    --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+    --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+    --text-3xl: clamp(2.5rem, 1rem + 4vw, 5rem);
+    --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+    --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+    --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
+    --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background: var(--color-bg); line-height: 1.6; }
+  img, picture, video, canvas, svg { display: block; max-width: 100%; }
+  h1,h2,h3,h4 { font-family: var(--font-display); text-wrap: balance; line-height: 1.1; }
+  p, li { text-wrap: pretty; }
+  button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+
+  /* NAV */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: var(--space-4) var(--space-6);
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: var(--space-2);
+    font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg);
+    color: var(--color-primary); text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo svg { flex-shrink: 0; }
+  .nav-cta {
+    background: var(--color-primary); color: #0d0d0d;
+    font-weight: 700; font-size: var(--text-sm);
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-sm);
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: background 180ms ease, transform 120ms ease;
+  }
+  .nav-cta:hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100dvh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: var(--space-24) var(--space-12) var(--space-16);
+    gap: var(--space-12);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 30% 40%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    background: var(--color-primary-glow);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--color-primary);
+    font-size: var(--text-xs); font-weight: 600;
+    padding: var(--space-1) var(--space-3);
+    border-radius: 9999px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: var(--space-5);
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-primary);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+  .hero h1 {
+    font-size: var(--text-3xl); font-weight: 700;
+    letter-spacing: -0.03em; margin-bottom: var(--space-5);
+    line-height: 1.05;
+  }
+  .hero h1 em { font-style: normal; color: var(--color-primary); }
+  .hero-sub {
+    font-size: var(--text-lg); color: var(--color-text-muted);
+    margin-bottom: var(--space-8); font-weight: 300;
+  }
+  .hero-checklist { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-10); }
+  .hero-checklist li {
+    display: flex; align-items: flex-start; gap: var(--space-3);
+    font-size: var(--text-sm); color: var(--color-text);
+  }
+  .hero-checklist li .check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--color-primary-glow);
+    border: 1px solid rgba(201,168,76,0.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    color: var(--color-primary); font-size: 11px;
+  }
+  .hero-checklist li strong { color: var(--color-text); }
+  .btn-primary {
+    display: inline-block;
+    background: var(--color-primary); color: #0d0d0d;
+    font-weight: 800; font-size: var(--text-sm); letter-spacing: 0.06em;
+    padding: var(--space-4) var(--space-10);
+    border-radius: var(--radius-sm); text-decoration: none;
+    text-transform: uppercase;
+    transition: background 180ms ease, transform 120ms ease, box-shadow 180ms ease;
+    box-shadow: 0 0 0 0 rgba(201,168,76,0);
+  }
+  .btn-primary:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(201,168,76,0.3);
+  }
+
+  /* LIVE FEED */
+  .hero-feed {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    position: relative; overflow: hidden;
+  }
+  .hero-feed::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  }
+  .feed-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+  .feed-title {
+    font-family: var(--font-display); font-size: var(--text-xs);
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .feed-live {
+    display: flex; align-items: center; gap: var(--space-1);
+    font-size: var(--text-xs); font-weight: 700; color: #4ade80;
+    letter-spacing: 0.06em;
+  }
+  .feed-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse 1.5s ease-in-out infinite; }
+  .feed-channel {
+    font-family: var(--font-display); font-size: var(--text-lg);
+    font-weight: 700; color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+  .feed-signals { display: flex; flex-direction: column; gap: var(--space-3); }
+  .signal-card {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+  .signal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-1); }
+  .signal-pair { font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm); }
+  .signal-dir { font-size: var(--text-xs); font-weight: 700; color: var(--color-text-muted); letter-spacing: 0.05em; }
+  .signal-result { font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm); }
+  .signal-result.profit { color: #4ade80; }
+  .signal-result.active { color: var(--color-primary); }
+  .signal-details { display: flex; gap: var(--space-4); }
+  .signal-detail { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .signal-detail span { color: var(--color-text); }
+
+  /* SECTION UTILITY */
+  .section { padding: clamp(3rem, 8vw, 6rem) var(--space-6); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+  .section-title {
+    font-size: var(--text-2xl); font-weight: 700;
+    letter-spacing: -0.03em; margin-bottom: var(--space-5);
+  }
+
+  /* OFFER SECTION */
+  .offer-section { background: var(--color-bg); }
+  .offer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); align-items: center; }
+  .offer-text p { font-size: var(--text-base); color: var(--color-text-muted); margin-bottom: var(--space-8); line-height: 1.7; }
+  .offer-amount {
+    display: flex; flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .offer-amount::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  }
+  .offer-amount-label { font-size: var(--text-xs); color: var(--color-text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-2); }
+  .offer-amount-range { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 700; color: var(--color-primary); letter-spacing: -0.04em; }
+  .offer-amount-sub { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: var(--space-2); }
+
+  /* STATS TABLE */
+  .stats-section { background: var(--color-surface); }
+  .stats-table-wrap {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .stats-table { width: 100%; border-collapse: collapse; }
+  .stats-table th {
+    background: var(--color-surface);
+    font-family: var(--font-display); font-size: var(--text-xs);
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--color-text-muted); padding: var(--space-4) var(--space-5);
+    text-align: left; border-bottom: 1px solid var(--color-border);
+  }
+  .stats-table td {
+    padding: var(--space-4) var(--space-5); font-size: var(--text-sm);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .stats-table tr:last-child td { border-bottom: none; }
+  .stats-table .total td { background: var(--color-primary-glow); font-weight: 700; }
+  .stats-table .total td:first-child { color: var(--color-primary); }
+  .plus { color: #4ade80; font-weight: 700; font-family: var(--font-display); }
+
+  /* TESTIMONIALS */
+  .testimonials-section { background: var(--color-bg); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+  .testimonial-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .testimonial-card:hover {
+    border-color: rgba(201,168,76,0.2);
+    box-shadow: 0 4px 24px rgba(201,168,76,0.06);
+  }
+  .testimonial-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+  .testimonial-user { display: flex; align-items: center; gap: var(--space-3); }
+  .testimonial-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--color-primary-glow);
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm);
+    color: var(--color-primary);
+  }
+  .testimonial-name { font-weight: 600; font-size: var(--text-sm); }
+  .testimonial-handle { font-size: var(--text-xs); color: var(--color-text-muted); }
+  .testimonial-badge {
+    font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.06em;
+    color: #4ade80; background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,0.2);
+    padding: 2px var(--space-2); border-radius: 9999px;
+  }
+  .testimonial-result {
+    font-family: var(--font-display); font-size: var(--text-lg);
+    font-weight: 700; color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+  .testimonial-text { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.65; font-style: italic; }
+  .testimonial-text::before { content: '\201C'; }
+  .testimonial-text::after { content: '\201D'; }
+
+  /* CTA SECTION */
+  .cta-section { background: var(--color-surface); }
+  .cta-box {
+    background: var(--color-bg);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--space-16) var(--space-12);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-box h2 { font-size: var(--text-2xl); letter-spacing: -0.03em; margin-bottom: var(--space-4); position: relative; }
+  .cta-box p { font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: var(--space-8); max-width: 55ch; margin-inline: auto; position: relative; }
+
+  /* FOOTER */
+  footer {
+    padding: var(--space-8) var(--space-6);
+    border-top: 1px solid var(--color-border);
+    display: flex; flex-direction: column; align-items: center;
+    gap: var(--space-3); text-align: center;
+  }
+  footer p { font-size: var(--text-xs); color: var(--color-text-faint); max-width: 60ch; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: calc(var(--space-16) + 60px) var(--space-4) var(--space-12); }
+    .hero-feed { display: none; }
+    .offer-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .cta-box { padding: var(--space-10) var(--space-5); }
+    .nav { padding: var(--space-3) var(--space-4); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Artem Trade logo">
+      <rect width="28" height="28" rx="7" fill="rgba(201,168,76,0.12)"/>
+      <path d="M6 20 L14 8 L22 20" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9.5 16h9" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="14" cy="8" r="2" fill="#c9a84c"/>
+    </svg>
+    Artem&nbsp;Trade
+  </a>
+  <a href="https://t.me/artem_nizaev_bot" target="_blank" rel="noopener noreferrer" class="nav-cta">ВСТУПИТЬ</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Закрытый Telegram-канал
+    </div>
+    <h1>Готовые сделки от <em>личного трейдера</em></h1>
+    <p class="hero-sub">Без сложных стратегий — просто повторяй и зарабатывай</p>
+    <ul class="hero-checklist">
+      <li>
+        <span class="check">✓</span>
+        <span><strong>Только результат:</strong> 8 из 10 сделок закрываем в плюс</span>
+      </li>
+      <li>
+        <span class="check">✓</span>
+        <span><strong>Бонусом:</strong> разборы рынка, новости, психология трейдинга</span>
+      </li>
+      <li>
+        <span class="check">✓</span>
+        <span><strong>Вступление в канал:</strong> только после отбора</span>
+      </li>
+      <li>
+        <span class="check">✓</span>
+        <span><strong>Структура:</strong> превращаем хаос рынка в системный доход</span>
+      </li>
+    </ul>
+    <a href="https://t.me/artem_nizaev_bot" target="_blank" rel="noopener noreferrer" class="btn-primary">ПРИСОЕДИНИТЬСЯ</a>
+  </div>
+
+  <div class="hero-feed" aria-label="Live сигналы">
+    <div class="feed-header">
+      <span class="feed-title">Live Signals Feed</span>
+      <span class="feed-live"><span class="feed-live-dot"></span> LIVE</span>
+    </div>
+    <div class="feed-channel">Artem Trade</div>
+    <div class="feed-signals">
+      <div class="signal-card">
+        <div class="signal-top">
+          <span class="signal-pair">XAUUSD</span>
+          <span class="signal-dir">BUY</span>
+          <span class="signal-result profit">PROFIT +120P</span>
+        </div>
+        <div class="signal-details">
+          <span class="signal-detail">Вход: <span>2335.20</span></span>
+          <span class="signal-detail">Выход: <span>2347.20</span></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-top">
+          <span class="signal-pair">EURUSD</span>
+          <span class="signal-dir">SELL</span>
+          <span class="signal-result profit">PROFIT +35P</span>
+        </div>
+        <div class="signal-details">
+          <span class="signal-detail">Вход: <span>1.08450</span></span>
+          <span class="signal-detail">Выход: <span>1.08100</span></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-top">
+          <span class="signal-pair">GBPUSD</span>
+          <span class="signal-dir">BUY</span>
+          <span class="signal-result active">АКТИВНО</span>
+        </div>
+        <div class="signal-details">
+          <span class="signal-detail">Вход: <span>1.27100</span></span>
+          <span class="signal-detail">Цель: <span>1.27850</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER SECTION -->
+<section class="offer-section section">
+  <div class="container">
+    <div class="offer-grid">
+      <div class="offer-text">
+        <div class="section-label">Почему Artem Trade?</div>
+        <h2 class="section-title">Получи бесплатный доступ в закрытый форекс-канал</h2>
+        <p>Просто повторяй мои сигналы — без необходимости изучать теханализ и тратить часы у монитора. Все сделки со строгим управлением рисками, готовы к копированию.</p>
+        <a href="https://t.me/artem_nizaev_bot" target="_blank" rel="noopener noreferrer" class="btn-primary">ПРИСОЕДИНИТЬСЯ</a>
+      </div>
+      <div class="offer-amount">
+        <div class="offer-amount-label">Ежемесячный доход участников</div>
+        <div class="offer-amount-range">$1 000–2 000</div>
+        <div class="offer-amount-sub">повторяя сигналы с депозита $500</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats-section section">
+  <div class="container">
+    <div class="section-label">Прозрачная статистика</div>
+    <h2 class="section-title">Как мы сделали +91% к депозиту за 4 месяца</h2>
+    <p style="color:var(--color-text-muted);margin-bottom:var(--space-8);font-size:var(--text-sm)">Старт с депозита $500 · Верифицированные результаты</p>
+    <div class="stats-table-wrap">
+      <table class="stats-table" role="table">
+        <thead>
+          <tr>
+            <th scope="col">Период</th>
+            <th scope="col">Результат ($)</th>
+            <th scope="col">Результат (%)</th>
+            <th scope="col">Сделок</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="total">
+            <td>Итого</td>
+            <td class="plus">+$455</td>
+            <td class="plus">+91%</td>
+            <td>53</td>
+          </tr>
+          <tr>
+            <td>Декабрь</td>
+            <td class="plus">+$105</td>
+            <td class="plus">+21%</td>
+            <td>14</td>
+          </tr>
+          <tr>
+            <td>Ноябрь</td>
+            <td class="plus">+$142.5</td>
+            <td class="plus">+28.5%</td>
+            <td>14</td>
+          </tr>
+          <tr>
+            <td>Октябрь</td>
+            <td class="plus">+$97.5</td>
+            <td class="plus">+19.5%</td>
+            <td>15</td>
+          </tr>
+          <tr>
+            <td>Сентябрь</td>
+            <td class="plus">+$110</td>
+            <td class="plus">+22%</td>
+            <td>10</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section section">
+  <div class="container">
+    <div class="section-label">Отзывы участников</div>
+    <h2 class="section-title" style="margin-bottom:var(--space-10)">Результаты участников канала</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">U1</div>
+            <div>
+              <div class="testimonial-name">Трейдер @user1</div>
+              <div class="testimonial-handle">Участник канала</div>
+            </div>
+          </div>
+          <span class="testimonial-badge">VERIFIED</span>
+        </div>
+        <div class="testimonial-result">+18.5% за неделю</div>
+        <p class="testimonial-text">Отличный старт. Чёткие сигналы, захожу строго по рекомендациям, риски соблюдаю</p>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">U2</div>
+            <div>
+              <div class="testimonial-name">Трейдер @user2</div>
+              <div class="testimonial-handle">Участник канала</div>
+            </div>
+          </div>
+          <span class="testimonial-badge">VERIFIED</span>
+        </div>
+        <div class="testimonial-result">+$340 за месяц</div>
+        <p class="testimonial-text">Очень доволен каналом. Впервые закрываю месяц в такой уверенный плюс. Спасибо Артёму!</p>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">U3</div>
+            <div>
+              <div class="testimonial-name">Трейдер @user3</div>
+              <div class="testimonial-handle">Участник канала</div>
+            </div>
+          </div>
+          <span class="testimonial-badge">VERIFIED</span>
+        </div>
+        <div class="testimonial-result">+11 сделок в плюс подряд</div>
+        <p class="testimonial-text">Статистика поражает — серия прибыльных сделок прямо сейчас радует кошелёк. Топ-уровень</p>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">U4</div>
+            <div>
+              <div class="testimonial-name">Трейдер @user4</div>
+              <div class="testimonial-handle">Участник канала</div>
+            </div>
+          </div>
+          <span class="testimonial-badge">VERIFIED</span>
+        </div>
+        <div class="testimonial-result">Депозит ×2 за 3 месяца</div>
+        <p class="testimonial-text">Удвоил депозит по сигналам Артёма, рисковал разумно. Канал полностью окупает все ожидания</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section section">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Вступай в Artem Trade прямо сейчас</h2>
+      <p>Места ограничены — канал работает только с отобранными участниками</p>
+      <a href="https://t.me/artem_nizaev_bot" target="_blank" rel="noopener noreferrer" class="btn-primary">ПРИСОЕДИНИТЬСЯ БЕСПЛАТНО</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-label="Artem Trade">
+    <rect width="28" height="28" rx="7" fill="rgba(201,168,76,0.12)"/>
+    <path d="M6 20 L14 8 L22 20" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="14" cy="8" r="2" fill="#c9a84c"/>
+  </svg>
+  <p>© 2025 Artem Trade</p>
+  <p>Результаты прошлых периодов не гарантируют результатов в будущем. Торговля на финансовых рынках сопряжена с риском потери капитала.</p>
+</footer>
+
+</body>
+</html>
