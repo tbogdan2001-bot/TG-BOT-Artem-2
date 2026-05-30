@@ -251,6 +251,19 @@ def check_and_interactive_config():
             f.write(f"POSTING_SCHEDULE={posting_schedule}\n\n")
             
         print("[УСПЕХ] Файл .env успешно создан!")
+        
+        # Резервное копирование в корень: если мы работаем в dist/ внутри папки разработчика,
+        # сохраняем копию .env в родительской папке, чтобы настройки не стерлись при удалении dist
+        try:
+            import shutil
+            parent_dir = os.path.dirname(BASE_DIR)
+            if getattr(sys, 'frozen', False):
+                # Проверяем, является ли родительская папка корнем исходников
+                if os.path.exists(os.path.join(parent_dir, "build_bot.py")) or os.path.exists(os.path.join(parent_dir, "main.py")):
+                    shutil.copy(env_path, os.path.join(parent_dir, ".env"))
+                    print("[УСПЕХ] Резервная копия конфигурации сохранена в корне проекта (..\\.env)")
+        except Exception as e:
+            logger.debug(f"Failed to backup env file to parent folder: {e}")
     except Exception as e:
         print(f"❌ Ошибка при записи файла .env: {e}")
 

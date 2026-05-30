@@ -79,19 +79,58 @@ def main():
         safe_input("\nНажмите клавишу ENTER для выхода...")
         sys.exit(1)
         
-    # 4. Copy configuration files
-    print("\n[3/4] Копирование конфигурационных файлов в папку сборки dist...")
+    # 4. Copy configuration files and session files
+    print("\n[3/4] Копирование конфигурационных и сессионных файлов...")
     dist_dir = "dist"
     os.makedirs(dist_dir, exist_ok=True)
+    dist_env = os.path.join(dist_dir, ".env")
+    root_env = ".env"
     
-    if os.path.exists(".env"):
-        shutil.copy(".env", os.path.join(dist_dir, ".env"))
-        print("[УСПЕХ] Файл .env успешно скопирован в папку dist!")
+    # 4a. Если в корне нет .env, но в dist/.env есть заполненный файл, спасаем его и копируем в корень
+    if not os.path.exists(root_env) and os.path.exists(dist_env):
+        is_placeholder = True
+        try:
+            with open(dist_env, "r", encoding="utf-8") as f:
+                content = f.read()
+                if "YOUR_BOT_TOKEN_HERE" not in content and "BOT_TOKEN=" in content:
+                    is_placeholder = False
+        except Exception:
+            pass
+            
+        if not is_placeholder:
+            try:
+                shutil.copy(dist_env, root_env)
+                print("[УСПЕХ] Обнаружен заполненный файл dist\\.env! Он скопирован в корень проекта для сохранения настроек.")
+            except Exception as e:
+                print(f"[ВНИМАНИЕ] Не удалось скопировать dist\\.env в корень: {e}")
+                
+    # 4b. Синхронизируем .env
+    if os.path.exists(root_env):
+        try:
+            shutil.copy(root_env, dist_env)
+            print("[УСПЕХ] Файл .env успешно скопирован в папку dist!")
+        except Exception as e:
+            print(f"❌ Ошибка при копировании .env в dist: {e}")
+    elif os.path.exists(dist_env):
+        print("[ИНФО] Файл .env уже существует в папке dist. Пропуск копирования шаблона во избежание перезаписи настроек.")
     elif os.path.exists(".env.example"):
-        shutil.copy(".env.example", os.path.join(dist_dir, ".env"))
-        print("[УСПЕХ] Шаблон .env.example скопирован как dist\\.env!")
+        try:
+            shutil.copy(".env.example", dist_env)
+            print("[УСПЕХ] Шаблон .env.example скопирован как dist\\.env!")
+        except Exception as e:
+            print(f"❌ Ошибка при копировании .env.example: {e}")
     else:
-        print("[ВНИМАНИЕ] Конфигурационные файлы не найдены в корне проекта!")
+        print("[ВНИМАНИЕ] Конфигурационные файлы не найдены!")
+        
+    # 4c. Копируем сессии (.session файлы) из корня в dist
+    import glob
+    session_files = glob.glob("*.session")
+    for f_path in session_files:
+        try:
+            shutil.copy(f_path, os.path.join(dist_dir, f_path))
+            print(f"[УСПЕХ] Файл сессии {f_path} успешно скопирован в папку dist!")
+        except Exception as e:
+            print(f"❌ Ошибка при копировании файла сессии {f_path}: {e}")
         
     # 5. Clean up temporary files
     print("\n[4/4] Очистка временных файлов сборщика...")

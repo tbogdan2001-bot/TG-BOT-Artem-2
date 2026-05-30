@@ -339,6 +339,21 @@ async def start_manager_accounts():
             # Logged in successfully! Cache client in running registry
             active_clients[session_name] = client
             
+            # Резервное копирование .session файла в корень проекта, чтобы он не удалялся вместе с папкой dist
+            if getattr(sys, 'frozen', False):
+                import shutil
+                import os
+                parent_dir = os.path.dirname(config.BASE_DIR)
+                # Проверяем, что родительская папка - это корень исходников
+                if os.path.exists(os.path.join(parent_dir, "build_bot.py")) or os.path.exists(os.path.join(parent_dir, "main.py")):
+                    session_file = f"{session_name}.session"
+                    if os.path.exists(session_file):
+                        try:
+                            shutil.copy(session_file, os.path.join(parent_dir, session_file))
+                            logger.info(f"Backed up session file {session_file} to parent folder.")
+                        except Exception as e:
+                            logger.error(f"Failed to backup session file: {e}")
+            
             # Join target channel if not already in it
             await join_target_channel_by_invite(client)
             
