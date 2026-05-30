@@ -20,11 +20,12 @@ def get_q1_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 def get_q2_keyboard() -> InlineKeyboardMarkup:
-    """Returns the keyboard for Q2 (Main Goal choice)."""
+    """Returns the keyboard for Q2 (Direction of interest choice)."""
     builder = InlineKeyboardBuilder()
-    builder.button(text="💰 Пассивный доход", callback_data="quiz_q2:passive_income")
-    builder.button(text="📊 Активный трейдинг", callback_data="quiz_q2:active_trading")
-    builder.button(text="🎓 Обучение", callback_data="quiz_q2:learning")
+    builder.button(text="📊 Трейдинг", callback_data="quiz_q2:trading")
+    builder.button(text="💰 Стейкинг", callback_data="quiz_q2:staking")
+    builder.button(text="📈 Арбитраж", callback_data="quiz_q2:arbitrage")
+    builder.button(text="🤖 Торговые боты", callback_data="quiz_q2:bots")
     builder.adjust(1)
     return builder.as_markup()
 

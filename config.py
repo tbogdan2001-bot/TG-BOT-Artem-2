@@ -1,12 +1,15 @@
 # config.py
-# CHANGED: Expanded persona image structures from 3 to 5 images (image_1, image_2, image_3, image_4, image_5)
-# - Added Unsplash URLs for image_3 (quiz mid-point) and image_5 (dark-style final CTA card)
-# - Added PRIVATE_CLUB_LINK environment variable fallback
-# - Added DARK_CTA_CAPTION closing text template
-# - Implemented get_personalized_bonus() to dynamically map quiz answer combinations to appropriate bonuses
-# - Extended FOLLOW_UP_DELAYS for Day 4 and Day 5 pressure funnel re-engagement without breaking indices
-# - Added MANAGER_GROUPS for Multi-Group Manager Rotation support
-# - Added PRESSURE_PLAN containing 5 messages over 5 days for re-engaging inactive leads
+# CHANGELOG ПРАВОК СЕНЬОР-РАЗРАБОТЧИКА:
+# 1. Выполнено переименование persona id: "alexander" -> "artem" во всем файле (PERSONAS, CHANNELS, MANAGER_ACCOUNTS, DEFAULT_PERSONA_ID и хелперах).
+# 2. Полностью удалена персона "elena" из словаря PERSONAS, остался только Артём.
+# 3. Значение CLOSER_USERNAME исправлено на "nizaev_art".
+# 4. Все заглушечные ссылки заменены на TODO-плейсхолдеры с пометкой `# ← ЗАПОЛНИТЬ`.
+# 5. Описание и имя персоны Артёма в PERSONAS["artem"] обновлено в соответствии со специализацией (A-CLUB, трейдер, арбитраж, стейкинг).
+# 6. Обновлен текст приветствия WELCOME_TEXT с перечислением крипто-тематик (торговые боты, арбитраж, стейкинг) и крипто-тематических вопросов.
+# 7. Вопросы и варианты ответов квиза полностью адаптированы под криптовалюты и трейдинг.
+# 8. Логика get_personalized_bonus() полностью переписана под сопоставление направления интереса (q2) с одним из 4-х новых крипто-бонусов Артёма.
+# 9. Тексты CONTENT_PLAN и PRESSURE_PLAN избавлены от имени "Дмитрий" и переведены на обезличенные кейсы ("один из участников клуба A-CLUB").
+# 10. В MANAGER_ACCOUNTS удален выбор elena/alexander: теперь все менеджеры получают persona_id = "artem".
 
 import os
 import sys
@@ -113,7 +116,7 @@ def check_and_interactive_config():
             "id": ch_id,
             "link": ch_link,
             "name": ch_name,
-            "persona": "alexander"
+            "persona": "artem"
         })
         
         print(f"✅ Канал #{ch_idx} добавлен.")
@@ -286,8 +289,8 @@ CLOSER_NOTIFY_CHAT_ID = os.getenv("CLOSER_NOTIFY_CHAT_ID", "")
 if CLOSER_NOTIFY_CHAT_ID.startswith("-") or CLOSER_NOTIFY_CHAT_ID.isdigit():
     CLOSER_NOTIFY_CHAT_ID = int(CLOSER_NOTIFY_CHAT_ID)
 
-# CHANGED: Private Club link configuration
-PRIVATE_CLUB_LINK = os.getenv("PRIVATE_CLUB_LINK", "https://t.me/+joinchat_example")
+# CHANGED: Private Club link configuration - changed default placeholder to TODO
+PRIVATE_CLUB_LINK = os.getenv("PRIVATE_CLUB_LINK", "TODO: вставить ссылку на приватный клуб")  # ← ЗАПОЛНИТЬ
 
 # Keitaro PostBack URL configuration loaded from environment
 KEITARO_POSTBACK_URL = os.getenv("KEITARO_POSTBACK_URL", "")
@@ -295,81 +298,69 @@ KEITARO_POSTBACK_URL = os.getenv("KEITARO_POSTBACK_URL", "")
 # Redis Connection URL
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
 
-# Closer Telegram Username (for Day 30 retention link)
-CLOSER_USERNAME = os.getenv("CLOSER_USERNAME", "example_closer_username")
+# Closer Telegram Username (for Day 30 retention link) - CHANGED to nizaev_art
+CLOSER_USERNAME = os.getenv("CLOSER_USERNAME", "nizaev_art")
 
 
 # CHANGED: Multi-Account Persona Support Configuration Profiles expanded to 5 images
+# 1. Persona ID changed to "artem", "elena" removed.
+# 2. Placeholders replaced by TODOs with comments.
+# 3. Description and niche updated.
 PERSONAS = {
-    "alexander": {
-        "id": "alexander",
+    "artem": {
+        "id": "artem",
         "name": "Артём",
-        "description": "основатель закрытого клуба A-CLUB и опытный криптоинвестор",
-        "niche": "криптовалюта, стейкинг и пассивный доход",
+        "description": "основатель закрытого клуба A-CLUB и практикующий трейдер",
+        "niche": "криптовалюта, трейдинг, арбитраж и стейкинг",
         "images": {
-            "image_1": os.getenv("ALEXANDER_IMAGE_1", "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1080"),
-            "image_2": os.getenv("ALEXANDER_IMAGE_2", "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1080"),
-            "image_3": os.getenv("ALEXANDER_IMAGE_3", "https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1080"),  # Quiz mid-point chart visual
-            "image_4": os.getenv("ALEXANDER_IMAGE_4", "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=1080"),  # Congrats
-            "image_5": os.getenv("ALEXANDER_IMAGE_5", "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1080"),  # Dark style final CTA card
+            "image_1": os.getenv("ARTEM_IMAGE_1", "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=1080"),
+            "image_2": os.getenv("ARTEM_IMAGE_2", "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1080"),
+            "image_3": os.getenv("ARTEM_IMAGE_3", "https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1080"),  # Quiz mid-point chart visual
+            "image_4": os.getenv("ARTEM_IMAGE_4", "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=1080"),  # Congrats
+            "image_5": os.getenv("ARTEM_IMAGE_5", "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1080"),  # Dark style final CTA card
         },
         "bonus_options": [
+            {"label": "🎁 Гайд по Трейдингу", "value": "bonus_trading"},
             {"label": "🎁 Секретный DeFi Гайд", "value": "bonus_defi"},
-            {"label": "🎁 Чек-лист: Безопасный Старт 2026", "value": "bonus_checklist"},
+            {"label": "🎁 Чек-лист по Арбитражу", "value": "bonus_arbitrage"},
+            {"label": "🎁 Руководство по Торговым Ботам", "value": "bonus_bots"},
         ],
         "bonus_contents": {
+            "bonus_trading": (
+                "🎉 **Ваш Гайд по Трейдингу успешно разблокирован!**\n\n"
+                "В этом руководстве вы найдете:\n"
+                "1️⃣ Пошаговый разбор технического анализа для новичков\n"
+                "2️⃣ Правила входа в сделки и риск-менеджмент\n"
+                "3️⃣ Топ-3 индикатора для успешной торговли\n\n"
+                "🔗 [Читать гайд в Notion](TODO: вставить ссылку на DeFi гайд)\n\n"  # ← ЗАПОЛНИТЬ
+                "Обязательно изучи его! Скоро я пришлю тебе первый секретный совет."
+            ),
             "bonus_defi": (
                 "🎉 **Ваш DeFi Гайд успешно разблокирован!**\n\n"
                 "В этом руководстве мы разложили по полочкам:\n"
                 "1️⃣ Что такое фарминг и стейкинг простыми словами\n"
                 "2️⃣ Пошаговый алгоритм покупки первой монеты\n"
                 "3️⃣ Топ-3 кошелька для безопасного хранения активов\n\n"
-                "🔗 [Читать гайд в Notion](https://example.com/defi-notion-guide)\n\n"
+                "🔗 [Читать гайд в Notion](TODO: вставить ссылку на DeFi гайд)\n\n"  # ← ЗАПОЛНИТЬ
                 "Обязательно изучи его! Скоро я пришлю тебе первый секретный совет."
             ),
-            "bonus_checklist": (
-                "🎉 **Ваш Чек-лист по безопасности в 2026 году готов!**\n\n"
-                "Защити свои средства от мошенников:\n"
-                "1️⃣ Правило двухфакторной аутентификации (2FA)\n"
-                "2️⃣ Как распознать фишинговые сайты за 5 секунд\n"
-                "3️⃣ Памятка по хранению сид-фразы\n\n"
-                "🔗 [Скачать Чек-лист в PDF](https://example.com/safety-checklist-2026.pdf)\n\n"
+            "bonus_arbitrage": (
+                "🎉 **Ваш Чек-лист по Арбитражу готов!**\n\n"
+                "Начни зарабатывать на разнице курсов:\n"
+                "1️⃣ Что такое межбиржевой и внутрибиржевой арбитраж\n"
+                "2️⃣ Как находить связки и избегать блокировок карт\n"
+                "3️⃣ Памятка по безопасности при P2P-сделках\n\n"
+                "🔗 [Скачать Чек-лист в PDF](TODO: вставить ссылку на чек-лист PDF)\n\n"  # ← ЗАПОЛНИТЬ
                 "Сохрани себе этот файл! Через час я пришлю тебе важную информацию."
-            )
-        }
-    },
-    "elena": {
-        "id": "elena",
-        "name": "Елена",
-        "description": "Эксперт по инвестициям в зарубежную недвижимость и пассивному доходу",
-        "niche": "инвестиции в недвижимость Бали, Дубая и Таиланда",
-        "images": {
-            "image_1": os.getenv("ELENA_IMAGE_1", "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1080"),
-            "image_2": os.getenv("ELENA_IMAGE_2", "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1080"),
-            "image_3": os.getenv("ELENA_IMAGE_3", "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1080"),  # Quiz mid-point real estate/architectural chart
-            "image_4": os.getenv("ELENA_IMAGE_4", "https://images.unsplash.com/photo-1512403754473-278556139b0a?w=1080"),  # Congrats
-            "image_5": os.getenv("ELENA_IMAGE_5", "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1080"),  # Dark luxury estate final CTA card
-        },
-        "bonus_options": [
-            {"label": "🎁 Каталог: ТОП-5 вилл 2026", "value": "bonus_villas"},
-            {"label": "🎁 Руководство: ROI 15%+ годовых", "value": "bonus_roi"},
-        ],
-        "bonus_contents": {
-            "bonus_villas": (
-                "🎉 **Каталог инвест-вилл успешно разблокирован!**\n\n"
-                "Внутри вы найдете:\n"
-                "1️⃣ Объекты на стадии котлована с доходностью от 30% на перепродаже\n"
-                "2️⃣ Виллы с гарантированной арендой от отельных операторов\n"
-                "🔗 [Скачать каталог вилл PDF](https://example.com/bali-villas-2026.pdf)\n\n"
-                "Изучите объекты! Скоро я пришлю вам первый аналитический обзор рынка."
             ),
-            "bonus_roi": (
-                "🎉 **Руководство по доходности недвижимости разблокировано!**\n\n"
-                "Основные разделы:\n"
-                "1️⃣ Как рассчитать реальный чистый ROI объекта\n"
-                "2️⃣ Налоги и скрытые расходы при покупке за рубежом\n"
-                "🔗 [Открыть руководство Notion](https://example.com/roi-guide-notion)\n\n"
-                "Сохраните себе ссылку! Скоро я пришлю вам полезные расчеты."
+            "bonus_bots": (
+                "🎉 **Ваш Гайд по Торговым Ботам успешно разблокирован!**\n\n"
+                "Автоматизируй свою торговлю:\n"
+                "1️⃣ Как работают сеточные и DCA боты\n"
+                "2️⃣ Настройка первого торгового бота шаг за шагом\n"
+                "3️⃣ Стратегии минимизации рисков при высокой волатильности\n\n"
+                "🔗 [Скачать Руководство PDF](TODO: вставить ссылку на чек-лист PDF)\n\n"  # ← ЗАПОЛНИТЬ
+                "Сохрани себе этот файл! Через час я пришлю тебе важную информацию."
             )
         }
     }
@@ -386,7 +377,7 @@ while True:
         "id": f"channel_{channel_idx}",
         "link": os.getenv(f"CHANNEL_{channel_idx}_LINK", ""),
         "name": os.getenv(f"CHANNEL_{channel_idx}_NAME", f"Channel {channel_idx}"),
-        "persona_id": os.getenv(f"CHANNEL_{channel_idx}_PERSONA", "alexander"),
+        "persona_id": os.getenv(f"CHANNEL_{channel_idx}_PERSONA", "artem"),
         "channel_id": ch_id
     })
     channel_idx += 1
@@ -401,7 +392,7 @@ if not CHANNELS:
             "id": "crypto_channel",
             "link": single_link or "https://t.me/+0npyyzG-yAoxYmMx",
             "name": single_name or "Артём Низаев | Криптовалюта, Аналитика, Доход",
-            "persona_id": "alexander",
+            "persona_id": "artem",
             "channel_id": single_id or "-1002222222222"
         })
 
@@ -412,12 +403,12 @@ if not CHANNELS:
             "id": "crypto_channel",
             "link": "https://t.me/+0npyyzG-yAoxYmMx",
             "name": "Артём Низаев | Криптовалюта, Аналитика, Доход",
-            "persona_id": "alexander",
+            "persona_id": "artem",
             "channel_id": "-1002222222222"
         }
     ]
 
-DEFAULT_PERSONA_ID = "alexander"
+DEFAULT_PERSONA_ID = "artem"
 
 def get_persona_for_user(user: dict) -> dict:
     """Dynamically resolves the assigned persona config for a user based on their source channel"""
@@ -442,21 +433,18 @@ def get_channel_id_for_user(user: dict) -> str:
     return CHANNEL_ID
 
 # CHANGED: Added quiz answer combination personalized bonus resolver
+# Elena branch removed, Artem logic maps direction of interest to corresponding bonus.
 def get_personalized_bonus(persona_id: str, q1: str, q2: str, q3: str) -> str:
     """Dynamically resolves the personalized bonus content based on quiz responses."""
-    # We map combinations to bonus options:
-    # Beginner -> DeFi guide / Villas catalog
-    # Experienced or Professional -> Safe start checklist / ROI guide
-    if persona_id == "alexander":
-        if q1 == "beginner":
-            return "bonus_defi"
-        else:
-            return "bonus_checklist"
-    else:  # elena
-        if q1 == "beginner":
-            return "bonus_villas"
-        else:
-            return "bonus_roi"
+    if q2 == "trading":
+        return "bonus_trading"
+    elif q2 == "staking":
+        return "bonus_defi"
+    elif q2 == "arbitrage":
+        return "bonus_arbitrage"
+    elif q2 == "bots":
+        return "bonus_bots"
+    return "bonus_trading"
 
 # Delays in minutes
 # FOLLOW_UP_DELAYS[0] is the subscription nudge check (Step 2b) (e.g. 30 mins)
@@ -467,12 +455,13 @@ def get_personalized_bonus(persona_id: str, q1: str, q2: str, q3: str) -> str:
 FOLLOW_UP_DELAYS = [30, 60, 1440, 2880, 4320, 10080, 20160, 43200, 5760, 7200]
 
 # 4. Core Funnel Texts (Allows full translation/modification of messages)
+# Updated Welcome text with specific specializations.
 WELCOME_TEXT = (
     "👋 Приветствую! Меня зовут **{persona_name}**.\n\n"
     "Я — {persona_description}.\n\n"
-    "Добро пожаловать в мой интерактивный бот-помощник! Моя цель — помочь тебе освоить **{niche}** и выйти на стабильный доход без лишнего риска.\n\n"
+    "Добро пожаловать в мой интерактивный бот-помощник! Моя цель — помочь тебе освоить **{niche}**, включая торговые боты, арбитраж и стейкинг, и выйти на стабильный доход без лишнего риска.\n\n"
     "Перед тем, как выдать тебе персональный бонус, давай пройдём короткий опрос из 3 вопросов 👇\n\n"
-    "**Вопрос 1: Какой у тебя уровень опыта в инвестициях?**"
+    "**Вопрос 1: Какой у тебя уровень опыта в трейдинге и криптовалюте?**"
 )
 
 SUBSCRIBE_CALL_TEXT = (
@@ -508,6 +497,7 @@ DARK_CTA_CAPTION = (
 )
 
 # Extended Warm-up Sequence Content Plan Supporting 8 Message Types
+# Success case changed to "one of A-CLUB members"
 CONTENT_PLAN = [
     {
         "type": "market_review",
@@ -526,8 +516,8 @@ CONTENT_PLAN = [
         "delay_index": 2,  # FOLLOW_UP_DELAYS[2] = 1440 minutes (24 hours)
         "text": (
             "📈 **КЕЙС УСПЕХА: +180% чистой прибыли**\n\n"
-            "Хочу показать вам путь Дмитрия, одного из участников нашего закрытого клуба.\n\n"
-            "Дмитрий пришел с нулевым опытом в {niche}. За месяц работы по моей системе "
+            "Хочу показать вам путь одного из участников нашего закрытого клуба A-CLUB.\n\n"
+            "Этот участник пришел с нулевым опытом в {niche}. За месяц работы по моей системе "
             "он окупил вложения и сформировал стабильный пассивный доход. "
             "Это еще раз доказывает: системный подход побеждает хаос!"
         ),
@@ -556,7 +546,7 @@ CONTENT_PLAN = [
         ),
         "image": "https://images.unsplash.com/photo-1521737711867-e3b904737c88?w=1080",
         "keyboard": [
-            [{"text": "🗓 Забронировать бесплатную консультацию", "url": "https://calendly.com/example-session"}]
+            [{"text": "🗓 Забронировать бесплатную консультацию", "url": "TODO: вставить ссылку на бронирование"}]  # ← ЗАПОЛНИТЬ
         ]
     }
 ]
@@ -582,7 +572,7 @@ RETENTION_PLAN = [
             "🎁 **СВЕЖИЙ МАТЕРИАЛ ДЛЯ ВАС!**\n\n"
             "Я записал новый подробный видео-гайд о том, как диверсифицировать доходы в {niche} "
             "и получать стабильный пассивный доход в долларах.\n\n"
-            "🔗 [Смотреть видео-гайд бесплатно](https://example.com/retention-video-guide)"
+            "🔗 [Смотреть видео-гайд бесплатно](TODO: вставить ссылку на видео-гайд)"  # ← ЗАПОЛНИТЬ
         )
     },
     {
@@ -617,6 +607,7 @@ TELEGRAM_API_ID = int(api_id_raw) if api_id_raw.isdigit() else 0
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH", "")
 
 # Manager accounts dynamically loaded
+# 10. Every manager receives persona_id = "artem"
 MANAGER_ACCOUNTS = []
 manager_idx = 1
 while True:
@@ -624,12 +615,9 @@ while True:
     if not mgr_phone:
         break
     
-    # Assign persona dynamically (odd to alexander, even to elena)
-    persona_id = "alexander" if manager_idx % 2 == 1 else "elena"
-    
     MANAGER_ACCOUNTS.append({
         "session": f"manager_{manager_idx}",
-        "persona_id": persona_id,
+        "persona_id": "artem",
         "groups": [],
         "phone": mgr_phone
     })
@@ -640,14 +628,14 @@ if not MANAGER_ACCOUNTS:
     if single_phone:
         MANAGER_ACCOUNTS.append({
             "session": "manager_1",
-            "persona_id": "alexander",
+            "persona_id": "artem",
             "groups": [],
             "phone": single_phone
         })
     else:
         MANAGER_ACCOUNTS.append({
             "session": "manager_1",
-            "persona_id": "alexander",
+            "persona_id": "artem",
             "groups": [],
             "phone": "+380000000000"
         })
@@ -660,6 +648,7 @@ MANAGER_GROUPS = [
 ]
 
 # Pressure Sequence (Дожим) for cold/inactive leads
+# Social proof text changed to "one of A-CLUB members"
 PRESSURE_PLAN = [
     {
         "stage": 1,
@@ -679,7 +668,7 @@ PRESSURE_PLAN = [
         "type": "social_proof",
         "text": (
             "📈 **РЕЗУЛЬТАТЫ НАШИХ УЧАСТНИКОВ**\n\n"
-            "Посмотрите на результаты одного из наших учеников в сфере **{niche}**!\n\n"
+            "Посмотрите на результаты одного из участников нашего закрытого клуба A-CLUB в сфере **{niche}**!\n\n"
             "Он тоже начинал с нуля, сомневался и откладывал на потом. Но применив мою пошаговую систему, "
             "он заработал первые деньги уже через неделю! Никакой магии — чистая математика и алгоритмы."
         ),

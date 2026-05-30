@@ -470,7 +470,7 @@ async def handle_q1_selection(callback: CallbackQuery):
     await database.set_user_quiz_q1(user_id, answer)
     await callback.answer()
     
-    q2_text = "**Вопрос 2: Какова ваша главная цель?**"
+    q2_text = "**Вопрос 2: Какое направление вас интересует больше всего?**"
     try:
         # Edit caption since the start post contains a photo
         await callback.message.edit_caption(
@@ -500,7 +500,7 @@ async def handle_q2_selection(callback: CallbackQuery):
     
     # Swaps photo to image_3 (quiz mid-point visual)
     image_3 = persona["images"].get("image_3")
-    q3_text = "**Вопрос 3: Какой ваш стартовый капитал?**"
+    q3_text = "**Вопрос 3: Какой стартовый капитал вы планируете для торговли?**"
     
     try:
         await callback.message.edit_media(
