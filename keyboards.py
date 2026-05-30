@@ -39,10 +39,11 @@ def get_q3_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-# CHANGED: Added Dark CTA post button
 def get_dark_cta_keyboard(club_link: str = None) -> InlineKeyboardMarkup:
     """Returns the final CTA button pointing to the private club channel/chat."""
     link = club_link if club_link else config.PRIVATE_CLUB_LINK
+    if not link or not (link.startswith("http://") or link.startswith("https://")):
+        link = config.CHANNEL_LINK
     builder = InlineKeyboardBuilder()
     builder.button(text="💎 Войти в закрытый клуб", url=link)
     builder.adjust(1)

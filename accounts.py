@@ -7,6 +7,7 @@
 
 import asyncio
 import logging
+import sys
 from datetime import datetime, timezone
 from telethon import TelegramClient, events
 from telethon.tl.types import ChannelParticipantsRecent
@@ -303,7 +304,6 @@ async def start_manager_accounts():
             
             # Check user authorization
             if not await client.is_user_authorized():
-                import sys
                 is_interactive = sys.stdin and sys.stdin.isatty()
                 
                 if is_interactive:

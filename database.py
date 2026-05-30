@@ -156,10 +156,18 @@ async def add_or_update_user(
         logger.info(f"New user registered: {telegram_id} (@{username}) via: {source_channel}, subid: {subid}")
         is_new = True
     else:
-        # Existing user - update username, reset blocked state, but DO NOT wipe stage, quiz, or tracking if they are already filled.
+        # Existing user - update username, reset blocked state, reset stage to 1, clear subscription status and clear quiz answers on re-entry.
         await db.execute("""
             UPDATE users 
             SET username = ?, is_blocked = 0, дата_входа = ?,
+                этап_воронки = 1,
+                статус_подписки = 0,
+                quiz_q1 = '',
+                quiz_q2 = '',
+                quiz_q3 = '',
+                bonus_variant = '',
+                closer_notified = 0,
+                retention_stage = 0,
                 source_channel = CASE WHEN source_channel = '' OR source_channel IS NULL THEN ? ELSE source_channel END,
                 utm_source = CASE WHEN utm_source = '' OR utm_source IS NULL THEN ? ELSE utm_source END,
                 utm_campaign = CASE WHEN utm_campaign = '' OR utm_campaign IS NULL THEN ? ELSE utm_campaign END,
@@ -169,7 +177,7 @@ async def add_or_update_user(
                 subid = CASE WHEN subid = '' OR subid IS NULL THEN ? ELSE subid END
             WHERE telegram_id = ?
         """, (username, now_str, source_channel, utm_source, utm_campaign, traffic_source, subid, telegram_id))
-        logger.info(f"Existing user re-entered: {telegram_id} (@{username}). Preserved existing quiz and stage status.")
+        logger.info(f"Existing user re-entered: {telegram_id} (@{username}). Reset stage to 1, cleared subscription and cleared quiz answers.")
         is_new = False
         
     await db.commit()

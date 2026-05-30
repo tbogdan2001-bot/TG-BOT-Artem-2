@@ -152,11 +152,11 @@ async def cmd_start(message: Message, command: CommandObject = None):
     user_id = message.from_user.id
     username = message.from_user.username or "unknown"
     
-    # Implement standard datetime rate limiting of 10 seconds
+    # Implement standard datetime rate limiting of 1 second
     now = datetime.now()
     if user_id in last_start_times:
         time_elapsed = (now - last_start_times[user_id]).total_seconds()
-        if time_elapsed < 10:
+        if time_elapsed < 1:
             logger.info(f"Rate limit triggered for user {user_id}. Ignoring /start request.")
             return
             
