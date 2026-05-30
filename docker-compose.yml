@@ -1,30 +1,16 @@
-# docker-compose.yml
-# CHANGED: Standard docker-compose orchestration file (TASK 9)
+# docker-compose.yml — клубная воронка (без Redis: FSM/планировщик не используются)
 version: '3.8'
 
 services:
   bot:
     build: .
-    container_name: tg_funnel_bot
+    container_name: tg_club_bot
     restart: unless-stopped
     stdin_open: true
     tty: true
     env_file:
       - .env
     volumes:
-      # Persistent SQLite database and log storage on the host
+      # Постоянное хранение SQLite-базы и лога на хосте
       - ./funnel_bot.db:/app/funnel_bot.db
       - ./bot.log:/app/bot.log
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:alpine
-    container_name: tg_funnel_redis
-    restart: unless-stopped
-    volumes:
-      - redis_data:/data
-
-volumes:
-  redis_data:
-
