@@ -156,18 +156,20 @@ async def add_or_update_user(
         logger.info(f"New user registered: {telegram_id} (@{username}) via: {source_channel}, subid: {subid}")
         is_new = True
     else:
-        # Existing user - update username, reset blocked state, reset stage to 1, reset closer/retention, reset quiz answers and analytics on re-entry
+        # Existing user - update username, reset blocked state, but DO NOT wipe stage, quiz, or tracking if they are already filled.
         await db.execute("""
             UPDATE users 
-            SET username = ?, этап_воронки = 1, is_blocked = 0, дата_входа = ?,
-                source_channel = ?, utm_source = ?, utm_campaign = ?, traffic_source = ?,
-                closer_notified = 0, retention_stage = 0, status = 'active',
-                quiz_q1 = '', quiz_q2 = '', quiz_q3 = '', bonus_variant = '',
-                messages_sent = 0, reactions_received = 0, replies_received = 0, pressure_started_at = NULL,
-                subid = ?
+            SET username = ?, is_blocked = 0, дата_входа = ?,
+                source_channel = CASE WHEN source_channel = '' OR source_channel IS NULL THEN ? ELSE source_channel END,
+                utm_source = CASE WHEN utm_source = '' OR utm_source IS NULL THEN ? ELSE utm_source END,
+                utm_campaign = CASE WHEN utm_campaign = '' OR utm_campaign IS NULL THEN ? ELSE utm_campaign END,
+                traffic_source = CASE WHEN traffic_source = '' OR traffic_source IS NULL THEN ? ELSE traffic_source END,
+                status = 'active',
+                pressure_started_at = NULL,
+                subid = CASE WHEN subid = '' OR subid IS NULL THEN ? ELSE subid END
             WHERE telegram_id = ?
         """, (username, now_str, source_channel, utm_source, utm_campaign, traffic_source, subid, telegram_id))
-        logger.info(f"Existing user re-entered: {telegram_id} (@{username}). Quiz and tracking reset. subid: {subid}")
+        logger.info(f"Existing user re-entered: {telegram_id} (@{username}). Preserved existing quiz and stage status.")
         is_new = False
         
     await db.commit()

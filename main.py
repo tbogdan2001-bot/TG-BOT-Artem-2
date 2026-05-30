@@ -231,6 +231,43 @@ async def cmd_start(message: Message, command: CommandObject = None):
     user = await database.get_user(user_id)
     persona = config.get_persona_for_user(user)
     
+    current_stage = user.get("этап_воронки", 1)
+    
+    if current_stage >= 4:
+        # User already completed the quiz and received their bonus, transition them straight to Step 4/5
+        await scheduler.transition_to_step_4(bot, user_id)
+        return
+        
+    if current_stage in [2, 3]:
+        # User completed the quiz but has not confirmed subscription yet
+        channel_link = config.CHANNEL_LINK
+        channel_name = config.CHANNEL_NAME
+        source_channel_id = user.get("source_channel")
+        if source_channel_id:
+            for ch in config.CHANNELS:
+                if ch["id"] == source_channel_id:
+                    channel_link = ch["link"]
+                    channel_name = ch["name"]
+                    break
+                    
+        text = config.SUBSCRIBE_CALL_TEXT.format(
+            channel_name=channel_name
+        )
+        kb = keyboards.get_subscribe_keyboard(channel_link)
+        image_2 = persona["images"].get("image_2")
+        
+        try:
+            await message.answer_photo(
+                photo=image_2,
+                caption=text,
+                reply_markup=kb,
+                parse_mode="Markdown"
+            )
+        except Exception as e:
+            logger.error(f"Failed to send subscribe photo on start re-entry: {e}")
+            await message.answer(text=text, reply_markup=kb, parse_mode="Markdown")
+        return
+        
     # Build welcome text using expert details & present Q1
     text = config.WELCOME_TEXT.format(
         persona_name=persona["name"],
